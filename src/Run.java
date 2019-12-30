@@ -27,10 +27,10 @@ public class Run {
         System.out.println("Enter the relocation costs:");
         for (int r = 0; r < cities; r++) {
             for (int c = 0; c < cities; c++) {
-//                if (c < r) {
-//                    relocationCost[r][c] = relocationCost[c][r];
-//                } else if (c == r) {
-                if (c == r) {
+                if (c < r) {
+                    relocationCost[r][c] = relocationCost[c][r];
+                } else if (c == r) {
+//                if (c == r) {
                     relocationCost[r][c] = 0;
                 } else {
                     System.out.print("cost of c( " + (r + 1) + " ) to c( " + (c + 1) + " )");
