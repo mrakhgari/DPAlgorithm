@@ -20,29 +20,65 @@ public class Run {
         int[][] relocationCost = new int[cities][cities];
         System.out.println("Enter the operating Costs:");
         for (int c = 0; c < cities; c++) {
-            System.out.println("Enter the city " + c + "'s cost:");
+            System.out.println("Enter the city " + (c + 1) + "'s cost:");
             operatingCost[c] = Arrays.stream(scanner.nextLine().replaceFirst("^\uFEFF", "").split(" "))
                     .map(String::trim).mapToInt(Integer::parseInt).toArray();
         }
         System.out.println("Enter the relocation costs:");
         for (int r = 0; r < cities; r++) {
             for (int c = 0; c < cities; c++) {
-                if (c < r) {
-                    relocationCost[r][c] = relocationCost[c][r];
-                } else if (c == r) {
+//                if (c < r) {
+//                    relocationCost[r][c] = relocationCost[c][r];
+//                } else if (c == r) {
+                if (c == r) {
                     relocationCost[r][c] = 0;
                 } else {
-                    System.out.print("cost of c( " + r + " ) to c( " + c + " )");
+                    System.out.print("cost of c( " + (r + 1) + " ) to c( " + (c + 1) + " )");
                     relocationCost[r][c] = scanner.nextInt();
                 }
             }
         }
 
-        System.out.println(Arrays.deepToString(operatingCost));
-        System.out.println(Arrays.deepToString(relocationCost));
-    }
+        int[][] dpTable = new int[cities][months];
+        int[][] path = new int[cities][months];
+        // set first month
+        for (int c = 0; c < cities; c++) {
+            dpTable[c][0] = operatingCost[c][0];
+            path[c][0] = c;
+        }
 
-    public void createTable() {
+        for (int month = 1; month < months; month++) {
+            for (int city = 0; city < cities; city++) {
+                dpTable[city][month] = Integer.MAX_VALUE;
+                for (int perCity = 0; perCity < cities; perCity++) {
+                    if (dpTable[perCity][month - 1] + relocationCost[perCity][city] < dpTable[city][month]) {
+                        dpTable[city][month] = dpTable[perCity][month - 1] + relocationCost[perCity][city];
+                        path[city][month] = perCity;
+                    }
+                }
+                dpTable[city][month] += operatingCost[city][month];
+            }
+        }
 
+        int city = 0;
+        int min = Integer.MAX_VALUE;
+        for (int c = 0; c < cities; c++) {
+            if (dpTable[c][months - 1] < min) {
+                min = dpTable[c][months - 1];
+                city = c;
+            }
+        }
+        System.out.println(city + 1);
+        int[] finalPath = new int[months];
+        finalPath[months - 1] = city;
+        for (int i = months - 2; i >= 0; i--) {
+            finalPath[i] = path[city][i + 1];
+            city = path[city][i + 1];
+        }
+        System.out.println("cities:");
+        for (Integer c : finalPath) {
+            System.out.print((c + 1) + " ");
+        }
+        System.out.println("end");
     }
 }
