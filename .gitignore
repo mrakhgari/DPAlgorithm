@@ -1,4 +1,4 @@
 # git ignore 
 *.pdf
-.ideai/
+.idea/
 *.iml

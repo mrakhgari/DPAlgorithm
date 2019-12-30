@@ -68,7 +68,7 @@ public class Run {
                 city = c;
             }
         }
-        System.out.println(city + 1);
+        System.out.println(min);
         int[] finalPath = new int[months];
         finalPath[months - 1] = city;
         for (int i = months - 2; i >= 0; i--) {
@@ -79,6 +79,6 @@ public class Run {
         for (Integer c : finalPath) {
             System.out.print((c + 1) + " ");
         }
-        System.out.println("end");
+//        System.out.println("end");
     }
 }
